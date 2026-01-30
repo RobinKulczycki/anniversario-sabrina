@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>For You ❤️</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
+  <style>
+    :root {
+      --pink: #ff5c8a;
+      --soft: #fad0c4;
+      --bg: linear-gradient(135deg, var(--pink), var(--soft));
+      --card: white;
+      --text: #444;
+    }
+
+    body.night {
+      --bg: linear-gradient(135deg, #2c2c54, #40407a);
+      --card: #1e1e2e;
+      --text: #eee;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100svh;
+      padding: env(safe-area-inset-top)
+               env(safe-area-inset-right)
+               env(safe-area-inset-bottom)
+               env(safe-area-inset-left);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+      transition: background 0.6s ease;
+    }
+
+    .card {
+      background: var(--card);
+      color: var(--text);
+      border-radius: 22px;
+      padding: 2rem;
+      width: min(90vw, 420px);
+      text-align: center;
+      box-shadow: 0 20px 45px rgba(0,0,0,0.25);
+      animation: fadeIn 1.2s ease;
+    }
+
+    h1 { color: var(--pink); }
+    h2 { margin-top: 2rem; }
+
+    p { line-height: 1.6; }
+
+    img {
+      width: 100%;
+      border-radius: 16px;
+      margin: 1rem 0;
+      opacity: 0;
+      transform: scale(0.95);
+      transition: all 0.6s ease;
+    }
+
+    img.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    button {
+      background: var(--pink);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.4rem;
+      border-radius: 30px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin: 0.5rem;
+      transition: transform 0.2s ease;
+    }
+
+    button:hover { transform: scale(1.05); }
+
+    .hidden { display: none; }
+    .reveal { animation: pop 0.6s ease; }
+
+    .heart {
+      position: fixed;
+      bottom: -20px;
+      font-size: 1.3rem;
+      animation: floatUp 5s linear forwards;
+      pointer-events: none;
+    }
+
+    .note {
+      font-style: italic;
+      margin-top: 1rem;
+    }
+
+    @keyframes floatUp {
+      to {
+        transform: translateY(-120vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pop {
+      from { transform: scale(0.9); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="card">
+
+  <h1>Feliz anniversario (só um pouco tarde) ❤️</h1>
+
+  <p>Aperta aonde quiser quantas vezes quiser 😊</p>
+
+  <!-- 🔴 CHANGE IMAGE -->
+  <img id="photo1" src="agt.png" alt="Us">
+
+  <button onclick="revealMemory()">Futura memória nossa </button>
+  <button onclick="randomNote()">Notinha (Pode apertar mais de uma vez) 💌</button>
+
+  <!-- MEMORY -->
+  <div id="memory" class="hidden">
+    <p>
+      <!-- 🔴 CHANGE TEXT -->
+      Daqui a pouco a gente fique assim meu bem, te amo
+    </p>
+  </div>
+
+  <!-- RANDOM LOVE NOTE -->
+  <p id="note" class="note"></p>
+
+  <!-- TIME COUNTER -->
+  <h2> A gente tem... ⏳</h2>
+  <p id="timer"></p>
+
+  <button onclick="finalSurprise()">Surpresinha Final </button>
+
+  <!-- SECRET -->
+  <div id="secret" class="hidden">
+    <h2>Para você 🤍</h2>
+    <p>
+      <!-- 🔴 CHANGE TEXT -->
+      Eu te amarei de janeiro em janeiro
+  </div>
+
+</div>
+
+<script>
+  const notes = [
+    "Mesmo longe, você é meu perto 🤍",
+    "A distância existe, mas a gente também",
+    "A saudade dói, mas vale a pena por você",
+    "Contando os dias pra te ver de novo",
+    "A melhor parte do dia é quando você aparece na tela",
+    "Saudade virou rotina, mas você também",
+    "Mesmo de longe, eu escolho você todos os dias",
+    "Te amar assim não é fácil (sua chata), mas é certo",
+    "Vale a espera quando é você",
+    "Você é meu lugar favorito 🤍",
+    "Com você, tudo faz mais sentido",
+    "Seu sorriso muda meu dia",
+    "Você me acalma",
+    "Você é minha princesinha",
+    "Você me faz bem",
+    "Ainda me apaixono por você todos os dias, isso ta dificil eim",
+    "Você é casa pra mim",
+    "Seu nome, além do seu dedinho, sempre me faz sorrir",
+    "Eu gosto muito de você",
+    "te amo"];
+
+  function revealMemory() {
+    document.getElementById("memory").classList.remove("hidden");
+    document.getElementById("photo1").classList.add("visible");
+    spawnHearts(10);
+  }
+
+  function randomNote() {
+    document.getElementById("note").innerText =
+      notes[Math.floor(Math.random() * notes.length)];
+    spawnHearts(6);
+  }
+
+  function toggleNight() {
+    document.body.classList.toggle("night");
+  }
+
+  function finalSurprise() {
+    document.getElementById("secret").classList.remove("hidden");
+    spawnHearts(30);
+  }
+
+  function spawnHearts(count) {
+    for (let i = 0; i < count; i++) {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.innerText = "❤️";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = (3 + Math.random() * 3) + "s";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 6000);
+    }
+  }
+
+  /* ⏳ CHANGE THIS DATE */
+  const startDate = new Date("2024-11-11");
+
+  setInterval(() => {
+    const diff = Date.now() - startDate;
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    document.getElementById("timer").innerText =
+      `${days} dias juntos ❤️`;
+  }, 1000);
+</script>
+
+</body>
+</html>
